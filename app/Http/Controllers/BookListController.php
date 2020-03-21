@@ -8,14 +8,9 @@ class BookListController extends Controller
 {
     public function index()
     {
-      $booklists = BookList::where('is_read', false)
-                          ->orderBy('created_at', 'desc')
-                          ->withCount(['books' => function ($query) {
-                            $query->where('is_read', false);
-                          }])
-                          ->get();
+      $booklists = BookList::all();
 
-      return $booklists->toJson();
+      return  response()->json($booklists);
     }
 
     public function store(Request $request)
@@ -35,18 +30,9 @@ class BookListController extends Controller
 
     public function show($id)
     {
-      $booklist = BookList::with(['books' => function ($query) {
-        $query->where('is_read', false);
-      }])->find($id);
-
-      return $booklist->toJson();
+      $booklist = BookList::find($id);
+      $booklist->books;
+      return response()->json($booklist);
     }
 
-    public function markAsRead(BookList $booklist)
-    {
-      $booklist->is_read = true;
-      $booklist->update();
-
-      return response()->json('BookList updated!');
-    }
 }

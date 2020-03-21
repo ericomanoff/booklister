@@ -18,8 +18,8 @@ class CreateBooksTable extends Migration
             $table->string('title');
             $table->string('author');
             $table->unsignedInteger('book_list_id');
-            $table->integer('num_pages');
-            $table->integer('rating');
+            $table->integer('num_pages')->default(null);
+            $table->integer('rating')->default(null);
             $table->boolean('is_read')->default(0);
             $table->timestamps();
         });

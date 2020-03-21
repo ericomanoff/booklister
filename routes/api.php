@@ -17,8 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::get('booklists', 'BookListController@index');
 Route::post('booklists', 'BookListController@store');
 Route::get('booklists/{id}', 'BookListController@show');
-Route::post('books', 'BookController@store');
-Route::put('books/{book}', 'BookController@markAsRead');
+
+Route::get('books/{bookId}', 'BookController@show');
+Route::post('booklists/{id}/books', 'BookController@store');
+Route::put('books/{bookId}', 'BookController@markAsRead');    
+
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
