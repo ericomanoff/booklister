@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\BookList;
 use Illuminate\Http\Request;
 
 class BookListController extends Controller
