@@ -18,8 +18,10 @@ Route::get('booklists', 'BookListController@index');
 Route::post('booklists', 'BookListController@store');
 Route::get('booklists/{id}', 'BookListController@show');
 
-Route::get('books/{bookId}', 'BookController@show');
 Route::post('booklists/{id}/books', 'BookController@store');
+Route::put('booklists/{id}/books', 'BookController@reorder');
+Route::delete('booklists/{id}/book/{bookId}', 'BookController@delete');
+Route::get('books/{bookId}', 'BookController@show');
 Route::put('books/{bookId}', 'BookController@markAsRead');    
 
 

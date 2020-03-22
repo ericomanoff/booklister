@@ -30,8 +30,7 @@ class BookListController extends Controller
 
     public function show($id)
     {
-      $booklist = BookList::find($id);
-      $booklist->books;
+      $booklist = BookList::find($id)->books()->orderBy('order')->get();
       return response()->json($booklist);
     }
 

@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 use App\Book;
+use App\BookList;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -14,6 +16,9 @@ class BookController extends Controller
           'author' => 'required'
         ]);
 
+        $booklist = BookList::find($id);
+        $listSize = $booklist->books->count();
+
         //maybe here hit good reads api to check for rating
         $rating = null;
 
@@ -23,6 +28,7 @@ class BookController extends Controller
           'author' => $validatedData['author'],
           'num_pages' => $request->input('num_pages', null),
           'rating' => $rating,
+          'order' => $listSize
         ]);
 
         return response()->json($book);
@@ -40,5 +46,31 @@ class BookController extends Controller
       {
         $book = Book::find($bookId);
         return response()->json($book);
+      }
+
+      public function delete(Request $request, $id, $bookId)
+      {
+        Book::destroy($bookId);
+        $response = "deleted resource: " . $bookId;
+        return response()->json($response);
+      }
+
+      public function reorder(Request $request, $id )
+      {
+        
+        DB::transaction(function () {
+        
+          global $request;
+          $data = $request->json()->all();
+          
+          foreach ($data as $key => $value) {
+              $book = Book::find($key);
+              $book->order = $value;
+              $book->save();
+            }
+          
+        });
+        
+        return response()->json('Redorder Complete!');
       }
 }
