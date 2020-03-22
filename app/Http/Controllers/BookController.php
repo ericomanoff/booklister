@@ -50,6 +50,30 @@ class BookController extends Controller
 
       public function delete(Request $request, $id, $bookId)
       {
+
+        //get array of Books on List by order attribute
+        $booksObject = Book::where('book_list_id', $id)->get();
+       
+        $booksArray = array();
+        foreach($booksObject as $key => $value) {
+          $booksArray[$value->id]=$value;
+        }
+        //remove item by id
+        unset($booksArray[$bookId]);
+        
+        //reindex ordered list
+        $reorderedBookList = array_values($booksArray); 
+        
+        //save new index to the books order attribute
+        foreach ($reorderedBookList as $key => $value) {
+          // print '$key: ' . $key . "\n"; 
+          // print '$value: ' . $value['id'] . "\n";
+          $book = Book::find($value['id']);
+          $book->order = $key;
+          $book->save();
+        }
+        
+        //destroy the book
         Book::destroy($bookId);
         $response = "deleted resource: " . $bookId;
         return response()->json($response);
